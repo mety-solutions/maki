@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=no, viewport-fit=cover">
+    <title>Maki de Madagascar · canvas adaptatif</title>
+    <link href="cssmin/style.css?v=1" rel="stylesheet">
+</head>
+<body>
+<div class="game-wrapper">
+<!-- Option 1: Chrono seul au centre -->
+<div class="chrono-container" id="chronoContainer" style="display: none; position: absolute; top: 10px; left: 50%; transform: translateX(-50%); z-index: 100;">
+    <div style="background: #efd5b3; padding: 8px 30px; border-radius: 40px; border: 3px solid #aa7d4c; box-shadow: 0 5px 0 #6b4e2e;">
+        <span style="font-size: 1.5rem; font-weight: bold;">⏱️ <span id="chronoDisplay">0.0</span></span>
+    </div>
+</div>
+    <div class="canvas-container">
+        <canvas id="gameCanvas"></canvas>
+        <!-- Écran de démarrage -->
+        <div class="start-screen" id="startScreen">
+            <div class="maki-preview"></div>
+            <h1 class="title">MAKI</h1>
+            <h1 class="title" style="font-size: 2.5rem; margin-top: -20px;">DE MADAGASCAR</h1>
+            <div class="subtitle">
+                <span>🌿</span> Collecte les mangues <span>🌿</span>
+            </div>
+            <button class="start-btn" id="startBtn">▶ Commencer</button>
+            <div class="audio-controls">
+                <button class="audio-btn" id="musicToggle">🎵 Musique ON</button>
+                <button class="audio-btn" id="sfxToggle">🔊 Sons ON</button>
+                <button class="audio-btn" id="aboutBtn">ℹ️ À propos</button>
+            </div>
+            <div style="color: #fcf9e1; margin-top: 20px; font-size: 0.9rem;">
+                ← → pour bouger | ↑ pour sauter
+            </div>
+        </div>
+    </div>
+
+    <div class="hud">
+        <span>🍃 MANGUES <span id="scoreDisplay">0</span></span>
+        <button id="resetBtn">↻</button>
+    </div>
+
+    <div class="tips">
+        <span><kbd>← →</kbd> bouge · <kbd>↑</kbd> saute</span>
+        <span>Le MAKI aime les mangues!</span>
+    </div>
+
+    <div class="mobile-controls">
+        <div class="mobile-btn" id="btnLeft">←</div>
+        <div class="mobile-btn" id="btnJump">↑</div>
+        <div class="mobile-btn" id="btnRight">→</div>
+    </div>
+</div>
+
+<div id="victoryModal">
+  <div class="modalContent">
+    <h2 id="victoryLabel">🎉 Victoire! 🎉</h2>
+    
+    <!-- Score actuel -->
+    <div id="scoreBoxDiv" class="scoreBox">
+      <p>🥭 <span id="finalScore">0</span> mangues</p>
+      <p>⏱️ <span id="finalTime">0.0</span> secondes</p>
+    </div>
+    
+    <!-- Meilleurs scores -->
+    <div class="highScoresBox">
+      <h3 style="color:#fbfbfb;">🏆 Meilleurs scores 🏆</h3>
+      <div id="highScoresList">
+        <!-- Les scores seront insérés ici -->
+      </div>
+    </div>
+    
+    <!-- Boutons -->
+    <div style="display: flex; gap: 15px; justify-content: center;">
+      <button id="resetGameEndBtn" class="btn">↻ REJOUER</button>
+      <button id="closeGameEndBtn" class="btn">✕ FERMER</button>
+    </div>
+  </div>
+</div>
+
+<!-- Game Over Modal -->
+<div id="gameOverModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(30, 20, 20, 0.9); z-index: 1000; justify-content: center; align-items: center;">
+    <div style="background: #2a1a0a; padding: 30px; border-radius: 40px; text-align: center; border: 4px solid #8B4513; max-width: 400px;">
+        <h2 style="color: #ff6b6b; font-size: 2.5rem;">💀 JEU FINI! 💀</h2>
+        <div style="background: #8B5A2B; padding: 20px; border-radius: 30px; margin: 20px 0;">
+            <p style="color: white; font-size: 2rem;">🥭 <span id="gameOverScore">0</span></p>
+            <p style="color: #FFD700;">Un fossa a attrapé Maki!</p>
+        </div>
+        <button id="resetGameOverBtn" style="background: #8B4513; color: white; border: none; padding: 15px 30px; border-radius: 40px; font-size: 1.3rem; cursor: pointer;">
+            ↻ Réessayer
+        </button>
+    </div>
+</div>
+
+<!-- Modal À propos / Crédits -->
+<div id="aboutModal"  style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(30, 20, 20, 0.9); z-index: 1000; justify-content: center; align-items: center;">>
+    <div style="background: #5f8b4b; padding: 30px; border-radius: 40px; text-align: center; border: 4px solid #8B4513; max-width: 500px;">
+        <h2 style="color:white;"> À PROPOS</h2>
+        
+        <div style="background: #d2b48c; padding: 20px; border-radius: 30px; margin: 20px 0;">
+            <h3 style="color: #2d4a1e; margin-bottom: 15px;">MAKI DE MADAGASCAR</h3>
+            <p style="margin: 10px 0;">Un jeu de plateforme créé pour apprendre le développement de jeux web.</p>
+            <p style="margin: 10px 0;">Aide Maki le lémurien à collecter toutes les mangues en évitant les fossas !</p>
+        </div>
+        
+        <div style="background: #8b9a6b; padding: 20px; border-radius: 30px; margin: 20px 0;">
+            <h3 style="color: #2d4a1e; margin-bottom: 15px;">🎵 CRÉDITS AUDIO</h3>
+            
+            <div style="display: flex; align-items: center; gap: 10px; margin: 15px 0; background: #efd5b3; padding: 15px; border-radius: 30px;">
+                <span style="font-size: 2rem;">🎵</span>
+                <div style="text-align: left;">
+                    <p><strong>Musiques de fond :</strong> "SoundHelix Song 1-2"</p>
+                    <p><strong>Artiste :</strong> T. Schürger</p>
+                    <p><strong>Source :</strong> <a href="https://soundhelix.com" target="_blank" style="color: #2d4a1e;">soundhelix.com</a></p>
+                </div>
+            </div>
+        </div>
+        
+        <div style="background: #b57e4a; padding: 15px; border-radius: 30px; margin: 20px 0;">
+            <h3 style="color: #2d4a1e; margin-bottom: 10px;">DÉVELOPPEMENT</h3>
+            <p style="color: white;">Créé pour apprendre JavaScript/Html/CSS</p>
+            <p style="color: white; font-size: 0.9rem;">© Mety Solutions - 2026 - Tous droits réservés</p>
+        </div>
+        
+        <div style="display: flex; gap: 15px; justify-content: center;">
+            <button class="audio-btn" id="closeAboutModalBtn" style="background: #7c9a5e; color: white;">Fermer</button>
+        </div>
+    </div>
+</div>
+
+<script src="jsmin/game.js"></script>
+</body>
+</html>
