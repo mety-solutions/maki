@@ -18,6 +18,18 @@
         <canvas id="gameCanvas"></canvas>
         <!-- Écran de démarrage -->
         <div class="start-screen" id="startScreen">
+        
+                <!-- Image de fond lemur.png centrée -->
+    <img src="images/lemur.jpeg" class="lemur-bg" alt="Maki background" style="
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        opacity: 1;
+        pointer-events: none;
+        z-index: 1;
+    ">
+        <div style="position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; margin-top: 220px;">
             <div class="maki-preview"></div>
             <h1 class="title">MAKI</h1>
             <h1 class="title" style="font-size: 2.5rem; margin-top: -20px;">DE MADAGASCAR</h1>
@@ -34,6 +46,7 @@
                 ← → pour bouger | ↑ pour sauter
             </div>
         </div>
+         </div>
     </div>
 
     <div class="hud">
@@ -95,7 +108,7 @@
 
 <!-- Modal À propos / Crédits -->
 <div id="aboutModal"  style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(30, 20, 20, 0.9); z-index: 1000; justify-content: center; align-items: center;">>
-    <div style="background: #5f8b4b; padding: 30px; border-radius: 40px; text-align: center; border: 4px solid #8B4513; max-width: 500px;">
+    <div style="padding: 30px; border-radius: 40px; text-align: center; border: 4px solid #8B4513; max-width: 500px;">
         <h2 style="color:white;"> À PROPOS</h2>
         
         <div style="background: #d2b48c; padding: 20px; border-radius: 30px; margin: 20px 0;">
